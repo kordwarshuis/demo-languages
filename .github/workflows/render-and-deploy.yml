@@ -1,0 +1,157 @@
+name: Render and Deploy to GitHub Pages
+
+# Triggered automatically on every push to main or master, or manually via
+# the Actions tab (or when dispatched by menu.yml for a render action).
+# Renders the specification and pushes the output to the gh-pages branch.
+# docs/ is NEVER committed to main/master.
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    # Do not trigger on workflow file changes (.github/). Each workflow file
+    # is uploaded as a separate commit during repo creation, which would cause
+    # multiple competing runs in the same concurrency group. Real spec content
+    # changes (spec/, specs.json, package.json, etc.) still trigger a render.
+    # The initial render after repo creation is handled by an explicit dispatch.
+    # The trigger matrix is now:
+    #
+    # Event --> Triggers render?
+    #
+    # Push spec content (spec, specs.json, etc.) --> ✅ yes
+    # Push `.github/workflows/*.yml` (repo creation) --> ❌ no
+    # `workflow_dispatch` (GitHubUi "render" button, or menu.yml) --> ✅ yes
+    # PR into main/master --> ❌ not triggered (no `pull_request:` event)
+
+    paths-ignore:
+      - '.github/**'
+  workflow_dispatch:
+
+# Only allow one deployment at a time; do not cancel in-progress runs so that
+# a completed deploy is never replaced by a stale one.
+# NOTE: do NOT use 'pages' as the group name — that conflicts with GitHub's own
+# internal Pages deployment concurrency group and causes spurious cancellations.
+concurrency:
+  group: render-and-deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ── Build & Deploy ────────────────────────────────────────────────────────────
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    # GitHub automatically generates a GITHUB_TOKEN for each workflow run.
+    # This ephemeral token is scoped only to the current repository and expires
+    # after the run completes. The 'permissions' block declares what this token
+    # is allowed to do — GitHub denies operations outside these scopes.
+    permissions:
+      contents: write # Required by peaceiris/actions-gh-pages to push to gh-pages
+      pages: write    # Required to configure GitHub Pages source via API
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Install dependencies 🔧
+        run: npm install
+
+      # Collect external references — this also renders the specification and
+      # writes output to the path defined in specs.json (output_path, typically ./docs/).
+      # The render pipeline (prepare-spec-configuration.js) automatically copies
+      # snapshots/ → docs/versions/ so frozen snapshots are always included.
+      #
+      # GITHUB_API_TOKEN authenticates the GitHub API calls that resolve external
+      # term references (see .env.example). Without it the pipeline runs against the
+      # 60-requests-per-hour unauthenticated limit, which specs with external
+      # glossaries can exhaust. The ephemeral GITHUB_TOKEN is sufficient when the
+      # glossary repos are public and only read access is needed.
+      - name: Collect external references and render
+        env:
+          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run collectExternalReferences
+
+      # Preserve the CNAME file from gh-pages before deploying.
+      # peaceiris/actions-gh-pages replaces the entire gh-pages branch with the
+      # contents of ./docs. A fresh CI checkout of main never contains docs/CNAME
+      # (docs/ is gitignored), so without this step any previously committed CNAME
+      # would be silently deleted on every render.
+      - name: Preserve CNAME from gh-pages
+        run: |
+          git fetch origin gh-pages 2>/dev/null || true
+          CNAME_CONTENT=$(git show origin/gh-pages:CNAME 2>/dev/null || echo "")
+          if [ -n "$CNAME_CONTENT" ]; then
+            echo "$CNAME_CONTENT" > docs/CNAME
+            echo "CNAME preserved: $CNAME_CONTENT"
+          else
+            echo "No CNAME found on gh-pages — nothing to preserve"
+          fi
+
+      # Push the rendered ./docs output to the gh-pages branch.
+      # peaceiris/actions-gh-pages creates the branch on first run when it
+      # does not yet exist — no manual branch setup is required.
+      # Uses GITHUB_TOKEN (automatically injected by GitHub) with 'contents: write'
+      # permission to push to this repository.
+      - name: Deploy to GitHub Pages 🚀
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          publish_branch: gh-pages
+
+      # Configure GitHub Pages to serve from the gh-pages branch (root /).
+      # POST creates the Pages site; anything else means it already exists (or the
+      # write was refused), so try PUT. Both calls use the run's ephemeral
+      # GITHUB_TOKEN with the 'pages: write' permission declared above.
+      #
+      # This step asserts the OUTCOME, not the call. GitHub documents the Pages
+      # settings endpoints as requiring an administrator, a maintainer, or the
+      # "manage GitHub Pages settings" permission, and it is not established that a
+      # workflow token's 'pages: write' satisfies that — a refusal here is plausible.
+      # Only one thing actually matters: that Pages ends up pointed at gh-pages. So
+      # the step logs the HTTP codes for diagnosis, then reads the settings back and
+      # fails if, and only if, the source is wrong. A refused write over an already
+      # correct setting is harmless and keeps the run green; a genuinely mispointed
+      # site fails the run rather than publishing a render nobody can see.
+      - name: Configure GitHub Pages source
+        run: |
+          set -uo pipefail
+          TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          API="https://api.github.com/repos/${{ github.repository }}/pages"
+          BODY='{"source":{"branch":"gh-pages","path":"/"}}'
+
+          POST_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+            -H "Authorization: token $TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "$API" -d "$BODY")
+          echo "POST /pages -> $POST_CODE"
+
+          if [ "$POST_CODE" != "201" ]; then
+            PUT_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X PUT \
+              -H "Authorization: token $TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "$API" -d "$BODY")
+            echo "PUT /pages -> $PUT_CODE"
+          fi
+
+          GET_CODE=$(curl -s -o pages.json -w "%{http_code}" \
+            -H "Authorization: token $TOKEN" \
+            -H "Accept: application/vnd.github+json" "$API")
+          echo "GET /pages -> $GET_CODE"
+
+          if [ "$GET_CODE" != "200" ]; then
+            echo "::error::Cannot read Pages settings (HTTP $GET_CODE) — the site may not be configured at all."
+            exit 1
+          fi
+
+          BRANCH=$(jq -r '.source.branch' pages.json)
+          SRC_PATH=$(jq -r '.source.path' pages.json)
+          echo "Pages source is $BRANCH $SRC_PATH"
+
+          if [ "$BRANCH" != "gh-pages" ] || [ "$SRC_PATH" != "/" ]; then
+            echo "::error::Pages serves from $BRANCH $SRC_PATH, not gh-pages /. The render reached gh-pages but the site will not show it. Repoint it under Settings > Pages."
+            exit 1
+          fi

@@ -1,0 +1,4 @@
+{
+    "title": "Reviewed introduction",
+    "description": "spec-head.manual.md is published. The sibling spec-head.ai.md stays on disk and is not published. An AI run skips this file."
+}
