@@ -5,31 +5,135 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Variants — Spec-Up-T Starterpack</title>
 <style>
-body { font: 16px/1.5 system-ui, sans-serif; margin: 2rem auto; max-width: 46rem; padding: 0 1rem; color: #1a1a1a; }
-a { color: #0b57d0; }
-.path { color: #555; font-family: ui-monospace, monospace; font-size: 0.85em; margin-left: 0.4em; }
-.kind { font-size: 0.75em; border: 1px solid #ccc; border-radius: 999px; padding: 0 0.45em; }
-.shadow { color: #555; }
-ul { padding-left: 1.25rem; }
-li { margin: 0.35rem 0; }
+:root {
+  --ink: #1c2430;
+  --muted: #5c6b7a;
+  --line: #d5e0e4;
+  --card: #fff;
+  --bg: #f3f7f6;
+  --accent: #0e6b66;
+  --accent-soft: #e5f3f1;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 17px/1.5 system-ui, sans-serif;
+}
+.page { max-width: 46rem; margin: 0 auto; padding: 2.25rem 1.25rem 4rem; }
+.back {
+  color: var(--accent);
+  font-size: 0.92rem;
+  text-decoration: none;
+}
+.back:hover { text-decoration: underline; }
+.spec-title {
+  margin: 1.4rem 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+h1 { margin: 0.15rem 0 0.6rem; font-size: 2rem; letter-spacing: -0.03em; }
+.lede { margin: 0 0 1.5rem; max-width: 38rem; color: var(--muted); }
+.tree { list-style: none; margin: 0; padding: 0; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.95rem 1.05rem 1rem;
+  margin: 0 0 0.8rem;
+}
+.branch[data-depth="0"] > .card { box-shadow: 0 1px 2px rgba(20, 40, 40, 0.04); }
+.trail { margin: 0 0 0.15rem; color: var(--muted); font-size: 0.82rem; }
+.name { margin: 0; font-size: 1.2rem; letter-spacing: -0.02em; }
+.branch[data-depth="0"] > .card > .name { font-size: 1.4rem; }
+.name a { color: var(--ink); text-decoration: none; }
+.name a::after { content: " →"; color: var(--accent); font-weight: 450; }
+.name a:hover { color: var(--accent); }
+.path {
+  display: inline-block;
+  margin: 0.35rem 0 0;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: #245751;
+  font-family: ui-monospace, monospace;
+  font-size: 0.78rem;
+}
+.description { margin: 0.55rem 0 0; }
+.meta { margin: 0.45rem 0 0; color: var(--accent); font-size: 0.88rem; font-weight: 600; }
+.nested {
+  margin-top: 0.95rem;
+  padding: 0.15rem 0 0 1rem;
+  border-left: 2px solid #b7d4d0;
+}
+.nested-label {
+  margin: 0 0 0.55rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+details { margin-top: 0.7rem; }
+summary { cursor: pointer; color: #345; font-size: 0.92rem; }
+.files ul, .sources ul { margin: 0.45rem 0 0; padding-left: 1.15rem; }
+.files li, .sources li { margin: 0.28rem 0; }
+.files .path, .sources .path {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: #445;
+  font-size: 0.84rem;
+}
+.kind {
+  font-size: 0.75rem;
+  border: 1px solid #c9d5d8;
+  border-radius: 999px;
+  padding: 0 0.45em;
+  color: #345;
+}
+.shadow { color: var(--muted); }
+.note {
+  margin-top: 1.5rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+.note .path {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font-size: 0.92rem;
+}
 </style>
 </head>
 <body id="variant-menu">
-<p><a href="../index.html">Canonical specification</a></p>
+<div class="page">
+<p><a class="back" href="../index.html">← Canonical specification</a></p>
+<p class="spec-title">Spec-Up-T Starterpack</p>
 <h1>Variants</h1>
-<p>Each folder is a variant of the specification. A file in a folder replaces the same file from the parent. When a file is missing, the build uses the parent file. Folder names are yours: a language, an audience, a reading level, or any other hierarchy.</p>
-<p>A <span class="path">.md</span> or <span class="path">.manual.md</span> file was written by a person and is never replaced by an AI rewrite. An AI rewrite is stored as <span class="path">.ai.md</span>. If a manual file is in the same folder, the manual file is the one that is published.</p>
+<p class="lede">Open a variant to read this specification in another form. A variant drawn inside another one starts from that parent. Only the files in its own folder are different.</p>
+<ol class="tree">
+<li class="branch" data-depth="0">
+<article class="card">
+
+<h2 class="name"><a href="de/index.html">German</a></h2>
+<p class="path">de</p>
+<p class="description">German text where a file exists in this folder. Every other file cascades from the canonical specification.</p>
+<p class="meta">1 variant inside</p>
+<details class="files">
+<summary>2 files in this folder</summary>
 <ul>
-<li>
-<a href="de/index.html">German</a>
-<span class="path">de</span>
-<p>German text where a file exists in this folder. Every other file cascades from the canonical specification.</p>
-<ul class="files">
 <li><span class="path">spec-head.md</span> <span class="kind">markdown file</span> published from this folder</li>
 <li><span class="path">terms-definitions/soil.md</span> <span class="kind">markdown file</span> published from this folder</li>
 </ul>
-<details>
-<summary>14 files in the built page</summary>
+</details>
+<details class="sources">
+<summary>Where the 14 parts of this page come from</summary>
 <ul>
 <li><span class="path">spec-head.md</span> — this folder (markdown file)</li>
 <li><span class="path">terms-and-definitions-intro.md</span> — canonical spec (markdown file)</li>
@@ -47,16 +151,22 @@ li { margin: 0.35rem 0; }
 <li><span class="path">spec-body.md</span> — canonical spec (markdown file)</li>
 </ul>
 </details>
+<div class="nested"><p class="nested-label">Inside German</p><ol class="tree">
+<li class="branch" data-depth="1">
+<article class="card">
+<p class="trail">German / Plain language</p>
+<h3 class="name"><a href="de/plain/index.html">Plain language</a></h3>
+<p class="path">de/plain</p>
+<p class="description">Simpler wording. A file that is not in this folder cascades from German, and then from the canonical specification.</p>
+
+<details class="files">
+<summary>1 file in this folder</summary>
 <ul>
-<li>
-<a href="de/plain/index.html">Plain language</a>
-<span class="path">de/plain</span>
-<p>Simpler wording. A file that is not in this folder cascades from German, and then from the canonical specification.</p>
-<ul class="files">
 <li><span class="path">spec-body.md</span> <span class="kind">markdown file</span> published from this folder</li>
 </ul>
-<details>
-<summary>14 files in the built page</summary>
+</details>
+<details class="sources">
+<summary>Where the 14 parts of this page come from</summary>
 <ul>
 <li><span class="path">spec-head.md</span> — de (markdown file)</li>
 <li><span class="path">terms-and-definitions-intro.md</span> — canonical spec (markdown file)</li>
@@ -75,18 +185,26 @@ li { margin: 0.35rem 0; }
 </ul>
 </details>
 
+</article>
 </li>
-</ul>
+</ol></div>
+</article>
 </li>
-<li>
-<a href="developer/index.html">Developers</a>
-<span class="path">developer</span>
-<p>An audience folder. The name is not a language code. Files that are not in this folder cascade from the canonical specification.</p>
-<ul class="files">
+<li class="branch" data-depth="0">
+<article class="card">
+
+<h2 class="name"><a href="developer/index.html">Developers</a></h2>
+<p class="path">developer</p>
+<p class="description">An audience folder. The name is not a language code. Files that are not in this folder cascade from the canonical specification.</p>
+<p class="meta">5 variants inside</p>
+<details class="files">
+<summary>1 file in this folder</summary>
+<ul>
 <li><span class="path">example-markup-in-markdown.md</span> <span class="kind">markdown file</span> published from this folder</li>
 </ul>
-<details>
-<summary>14 files in the built page</summary>
+</details>
+<details class="sources">
+<summary>Where the 14 parts of this page come from</summary>
 <ul>
 <li><span class="path">spec-head.md</span> — canonical spec (markdown file)</li>
 <li><span class="path">terms-and-definitions-intro.md</span> — canonical spec (markdown file)</li>
@@ -104,16 +222,22 @@ li { margin: 0.35rem 0; }
 <li><span class="path">spec-body.md</span> — canonical spec (markdown file)</li>
 </ul>
 </details>
+<div class="nested"><p class="nested-label">Inside Developers</p><ol class="tree">
+<li class="branch" data-depth="1">
+<article class="card">
+<p class="trail">Developers / Beginners</p>
+<h3 class="name"><a href="developer/beginner/index.html">Beginners</a></h3>
+<p class="path">developer/beginner</p>
+<p class="description">The introduction is an AI rewrite (spec-head.ai.md). This folder has no manual file for it, so the rewrite is published. Other files cascade from Developers, then from the canonical specification.</p>
+
+<details class="files">
+<summary>1 file in this folder</summary>
 <ul>
-<li>
-<a href="developer/beginner/index.html">Beginners</a>
-<span class="path">developer/beginner</span>
-<p>The introduction is an AI rewrite (spec-head.ai.md). This folder has no manual file for it, so the rewrite is published. Other files cascade from Developers, then from the canonical specification.</p>
-<ul class="files">
 <li><span class="path">spec-head.ai.md</span> <span class="kind">AI rewrite</span> published from this folder</li>
 </ul>
-<details>
-<summary>14 files in the built page</summary>
+</details>
+<details class="sources">
+<summary>Where the 14 parts of this page come from</summary>
 <ul>
 <li><span class="path">spec-head.md</span> — this folder (AI rewrite)</li>
 <li><span class="path">terms-and-definitions-intro.md</span> — canonical spec (markdown file)</li>
@@ -132,16 +256,21 @@ li { margin: 0.35rem 0; }
 </ul>
 </details>
 
+</article>
 </li>
-<li>
-<a href="developer/de/index.html">German</a>
-<span class="path">developer/de</span>
-<p>No files in this folder. The whole specification cascades from Developers, then from the canonical specification.</p>
-<ul class="files">
-<li>No files in this folder. The whole specification cascades from the parent.</li>
-</ul>
-<details>
-<summary>14 files in the built page</summary>
+<li class="branch" data-depth="1">
+<article class="card">
+<p class="trail">Developers / German</p>
+<h3 class="name"><a href="developer/de/index.html">German</a></h3>
+<p class="path">developer/de</p>
+<p class="description">No files in this folder. The whole specification cascades from Developers, then from the canonical specification.</p>
+
+<details class="files">
+<summary>No files in this folder</summary>
+<p>The whole specification cascades from the parent.</p>
+</details>
+<details class="sources">
+<summary>Where the 14 parts of this page come from</summary>
 <ul>
 <li><span class="path">spec-head.md</span> — canonical spec (markdown file)</li>
 <li><span class="path">terms-and-definitions-intro.md</span> — canonical spec (markdown file)</li>
@@ -160,16 +289,21 @@ li { margin: 0.35rem 0; }
 </ul>
 </details>
 
+</article>
 </li>
-<li>
-<a href="developer/en/index.html">English</a>
-<span class="path">developer/en</span>
-<p>No files in this folder. The whole specification cascades from Developers, then from the canonical specification.</p>
-<ul class="files">
-<li>No files in this folder. The whole specification cascades from the parent.</li>
-</ul>
-<details>
-<summary>14 files in the built page</summary>
+<li class="branch" data-depth="1">
+<article class="card">
+<p class="trail">Developers / English</p>
+<h3 class="name"><a href="developer/en/index.html">English</a></h3>
+<p class="path">developer/en</p>
+<p class="description">No files in this folder. The whole specification cascades from Developers, then from the canonical specification.</p>
+
+<details class="files">
+<summary>No files in this folder</summary>
+<p>The whole specification cascades from the parent.</p>
+</details>
+<details class="sources">
+<summary>Where the 14 parts of this page come from</summary>
 <ul>
 <li><span class="path">spec-head.md</span> — canonical spec (markdown file)</li>
 <li><span class="path">terms-and-definitions-intro.md</span> — canonical spec (markdown file)</li>
@@ -188,16 +322,21 @@ li { margin: 0.35rem 0; }
 </ul>
 </details>
 
+</article>
 </li>
-<li>
-<a href="developer/nl/index.html">Dutch</a>
-<span class="path">developer/nl</span>
-<p>No files in this folder. The whole specification cascades from Developers, then from the canonical specification.</p>
-<ul class="files">
-<li>No files in this folder. The whole specification cascades from the parent.</li>
-</ul>
-<details>
-<summary>14 files in the built page</summary>
+<li class="branch" data-depth="1">
+<article class="card">
+<p class="trail">Developers / Dutch</p>
+<h3 class="name"><a href="developer/nl/index.html">Dutch</a></h3>
+<p class="path">developer/nl</p>
+<p class="description">No files in this folder. The whole specification cascades from Developers, then from the canonical specification.</p>
+
+<details class="files">
+<summary>No files in this folder</summary>
+<p>The whole specification cascades from the parent.</p>
+</details>
+<details class="sources">
+<summary>Where the 14 parts of this page come from</summary>
 <ul>
 <li><span class="path">spec-head.md</span> — canonical spec (markdown file)</li>
 <li><span class="path">terms-and-definitions-intro.md</span> — canonical spec (markdown file)</li>
@@ -216,17 +355,24 @@ li { margin: 0.35rem 0; }
 </ul>
 </details>
 
+</article>
 </li>
-<li>
-<a href="developer/reviewed/index.html">Reviewed introduction</a>
-<span class="path">developer/reviewed</span>
-<p>spec-head.manual.md is published. The sibling spec-head.ai.md stays on disk and is not published. An AI run skips this file.</p>
-<ul class="files">
+<li class="branch" data-depth="1">
+<article class="card">
+<p class="trail">Developers / Reviewed introduction</p>
+<h3 class="name"><a href="developer/reviewed/index.html">Reviewed introduction</a></h3>
+<p class="path">developer/reviewed</p>
+<p class="description">spec-head.manual.md is published. The sibling spec-head.ai.md stays on disk and is not published. An AI run skips this file.</p>
+
+<details class="files">
+<summary>2 files in this folder</summary>
+<ul>
 <li><span class="path">spec-head.manual.md</span> <span class="kind">manual file</span> published from this folder</li>
 <li class="shadow"><span class="path">spec-head.ai.md</span> <span class="kind">AI rewrite</span> not published — a manual file in this folder wins</li>
 </ul>
-<details>
-<summary>14 files in the built page</summary>
+</details>
+<details class="sources">
+<summary>Where the 14 parts of this page come from</summary>
 <ul>
 <li><span class="path">spec-head.md</span> — this folder (manual file)</li>
 <li><span class="path">terms-and-definitions-intro.md</span> — canonical spec (markdown file)</li>
@@ -245,18 +391,24 @@ li { margin: 0.35rem 0; }
 </ul>
 </details>
 
+</article>
 </li>
-</ul>
+</ol></div>
+</article>
 </li>
-<li>
-<a href="legal/index.html">Legal</a>
-<span class="path">legal</span>
-<p>An audience folder beside Developers. Child folders are languages. With no files here, every file cascades from the canonical specification.</p>
-<ul class="files">
-<li>No files in this folder. The whole specification cascades from the parent.</li>
-</ul>
-<details>
-<summary>14 files in the built page</summary>
+<li class="branch" data-depth="0">
+<article class="card">
+
+<h2 class="name"><a href="legal/index.html">Legal</a></h2>
+<p class="path">legal</p>
+<p class="description">An audience folder beside Developers. Child folders are languages. With no files here, every file cascades from the canonical specification.</p>
+<p class="meta">3 variants inside</p>
+<details class="files">
+<summary>No files in this folder</summary>
+<p>The whole specification cascades from the parent.</p>
+</details>
+<details class="sources">
+<summary>Where the 14 parts of this page come from</summary>
 <ul>
 <li><span class="path">spec-head.md</span> — canonical spec (markdown file)</li>
 <li><span class="path">terms-and-definitions-intro.md</span> — canonical spec (markdown file)</li>
@@ -274,16 +426,20 @@ li { margin: 0.35rem 0; }
 <li><span class="path">spec-body.md</span> — canonical spec (markdown file)</li>
 </ul>
 </details>
-<ul>
-<li>
-<a href="legal/de/index.html">German</a>
-<span class="path">legal/de</span>
-<p>No files in this folder. The whole specification cascades from Legal, then from the canonical specification.</p>
-<ul class="files">
-<li>No files in this folder. The whole specification cascades from the parent.</li>
-</ul>
-<details>
-<summary>14 files in the built page</summary>
+<div class="nested"><p class="nested-label">Inside Legal</p><ol class="tree">
+<li class="branch" data-depth="1">
+<article class="card">
+<p class="trail">Legal / German</p>
+<h3 class="name"><a href="legal/de/index.html">German</a></h3>
+<p class="path">legal/de</p>
+<p class="description">No files in this folder. The whole specification cascades from Legal, then from the canonical specification.</p>
+
+<details class="files">
+<summary>No files in this folder</summary>
+<p>The whole specification cascades from the parent.</p>
+</details>
+<details class="sources">
+<summary>Where the 14 parts of this page come from</summary>
 <ul>
 <li><span class="path">spec-head.md</span> — canonical spec (markdown file)</li>
 <li><span class="path">terms-and-definitions-intro.md</span> — canonical spec (markdown file)</li>
@@ -302,16 +458,21 @@ li { margin: 0.35rem 0; }
 </ul>
 </details>
 
+</article>
 </li>
-<li>
-<a href="legal/en/index.html">English</a>
-<span class="path">legal/en</span>
-<p>No files in this folder. The whole specification cascades from Legal, then from the canonical specification.</p>
-<ul class="files">
-<li>No files in this folder. The whole specification cascades from the parent.</li>
-</ul>
-<details>
-<summary>14 files in the built page</summary>
+<li class="branch" data-depth="1">
+<article class="card">
+<p class="trail">Legal / English</p>
+<h3 class="name"><a href="legal/en/index.html">English</a></h3>
+<p class="path">legal/en</p>
+<p class="description">No files in this folder. The whole specification cascades from Legal, then from the canonical specification.</p>
+
+<details class="files">
+<summary>No files in this folder</summary>
+<p>The whole specification cascades from the parent.</p>
+</details>
+<details class="sources">
+<summary>Where the 14 parts of this page come from</summary>
 <ul>
 <li><span class="path">spec-head.md</span> — canonical spec (markdown file)</li>
 <li><span class="path">terms-and-definitions-intro.md</span> — canonical spec (markdown file)</li>
@@ -330,16 +491,21 @@ li { margin: 0.35rem 0; }
 </ul>
 </details>
 
+</article>
 </li>
-<li>
-<a href="legal/nl/index.html">Dutch</a>
-<span class="path">legal/nl</span>
-<p>No files in this folder. The whole specification cascades from Legal, then from the canonical specification.</p>
-<ul class="files">
-<li>No files in this folder. The whole specification cascades from the parent.</li>
-</ul>
-<details>
-<summary>14 files in the built page</summary>
+<li class="branch" data-depth="1">
+<article class="card">
+<p class="trail">Legal / Dutch</p>
+<h3 class="name"><a href="legal/nl/index.html">Dutch</a></h3>
+<p class="path">legal/nl</p>
+<p class="description">No files in this folder. The whole specification cascades from Legal, then from the canonical specification.</p>
+
+<details class="files">
+<summary>No files in this folder</summary>
+<p>The whole specification cascades from the parent.</p>
+</details>
+<details class="sources">
+<summary>Where the 14 parts of this page come from</summary>
 <ul>
 <li><span class="path">spec-head.md</span> — canonical spec (markdown file)</li>
 <li><span class="path">terms-and-definitions-intro.md</span> — canonical spec (markdown file)</li>
@@ -358,9 +524,16 @@ li { margin: 0.35rem 0; }
 </ul>
 </details>
 
+</article>
 </li>
-</ul>
+</ol></div>
+</article>
 </li>
-</ul>
+</ol>
+<details class="note">
+<summary>How a file is chosen</summary>
+<p>A <span class="path">.md</span> or <span class="path">.manual.md</span> file was written by a person and is never replaced by an AI rewrite. An AI rewrite is stored as <span class="path">.ai.md</span>. When a manual file is in the same folder, that manual file is the one that is published.</p>
+</details>
+</div>
 </body>
 </html>
