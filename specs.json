@@ -14,8 +14,8 @@
         "spec-body.md"
       ],
       "variants": {
-        "directory": "languages",
-        "menu_title": "Versions"
+        "directory": "variants",
+        "menu_title": "Variants"
       },
       "logo": "https://raw.githubusercontent.com/trustoverip/spec-up-t/refs/heads/master/src/install-from-boilerplate/boilerplate/static/logo.svg",
       "logo_link": "https://github.com/trustoverip/spec-up-t",

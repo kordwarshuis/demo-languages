@@ -1,11 +1,11 @@
-# Versions of this specification
+# Variants of this specification
 
-`languages/` is the sample versions directory. The name is only a sample. In `specs.json` it is set with:
+`variants/` is the sample variants directory. The name is only a sample. In `specs.json` it is set with:
 
 ```json
 "variants": {
-    "directory": "languages",
-    "menu_title": "Versions"
+    "directory": "variants",
+    "menu_title": "Variants"
 }
 ```
 
@@ -13,25 +13,25 @@
 
 ## Cascade
 
-Each subdirectory is a version. A version can contain another version. Folder names are free: `de`, `plain`, `developer`, `beginner`, or any name you choose.
+Each subdirectory is a variant. A variant can contain another variant. Folder names are free: `de`, `plain`, `developer`, `beginner`, or any name you choose.
 
 For every markdown file in the canonical spec, the build looks in this order:
 
-1. The version folder itself
+1. The variant folder itself
 2. Each parent folder, up to this directory
-3. A file placed directly in this directory (shared by every version)
+3. A file placed directly in this directory (shared by every variant)
 4. The same file in the canonical `spec/` directory
 
 The first file found is the one that is published. A missing translation is filled in from the parent during the build. The build does not copy that file back into the source tree. A copied source file would look like a translation, and the next build and the next AI rewrite would treat it as one.
 
-`terms-definitions/` is not a version. It is the folder where term files live, in the canonical spec and inside a version. A version must not use that folder name, or the name of any other directory that appears in `markdown_paths`.
+`terms-definitions/` is not a variant. It is the folder where term files live, in the canonical spec and inside a variant. A variant must not use that folder name, or the name of any other directory that appears in `markdown_paths`.
 
 `variant.json` is optional. It sets the title and description shown in the menu. The folder name is used when there is no title.
 
 ```text
 spec/
   spec-head.md                         canonical text
-  languages/                           menu, not a version
+  variants/                            menu, not a variant
     de/                                language first
       spec-head.md
       terms-definitions/soil.md
@@ -76,10 +76,10 @@ const { applyAiRewrites } = require('spec-up-t/src/pipeline/variants/ai-variant-
 const { ancestorLayers } = require('spec-up-t/src/pipeline/variants/variant-cascade');
 
 await applyAiRewrites({
-    layerDir: 'spec/languages/de',
+    layerDir: 'spec/variants/de',
     ancestorLayers: ancestorLayers({
         specDir: 'spec',
-        variantRoot: 'spec/languages',
+        variantRoot: 'spec/variants',
         relative: 'de'
     }),
     logicalPaths: ['spec-head.md', 'spec-body.md'],
@@ -93,6 +93,6 @@ await applyAiRewrites({
 
 ## Build
 
-The canonical page is `docs/index.html`. Its header links to `docs/languages/index.html`, the menu of every version.
+The canonical page is `docs/index.html`. Its header links to `docs/variants/index.html`, the menu of every variant.
 
-Each folder, including a folder with no markdown files, is built to the same path under the output directory. For this sample that is `docs/languages/de/index.html`, `docs/languages/de/plain/index.html`, `docs/languages/developer/index.html`, `docs/languages/developer/de/index.html`, `docs/languages/legal/nl/index.html`, and the same for every other folder.
+Each folder, including a folder with no markdown files, is built to the same path under the output directory. For this sample that is `docs/variants/de/index.html`, `docs/variants/de/plain/index.html`, `docs/variants/developer/index.html`, `docs/variants/developer/de/index.html`, `docs/variants/legal/nl/index.html`, and the same for every other folder.
