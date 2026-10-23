@@ -1,4 +1,4 @@
 {
     "title": "German",
-    "description": "No files in this folder. The whole specification cascades from Legal, then from the canonical specification."
+    "description": "German legal introduction. spec-head.md replaces the English introduction in the Legal folder. Every other file cascades from the canonical specification."
 }

@@ -39,14 +39,25 @@ spec/
         spec-body.md
     developer/                         audience first
       example-markup-in-markdown.md
-      de/  en/  nl/                    empty: the whole page cascades
+      de/                              German intro; example stays from developer
+        spec-head.md
+      en/                              compost term only
+        terms-definitions/compost.md
+      nl/                              Dutch closing section
+        spec-body.md
       beginner/
         spec-head.ai.md                AI draft, published
       reviewed/
         spec-head.manual.md            published
         spec-head.ai.md                kept, not published
     legal/                             another audience
-      de/  en/  nl/                    empty: the whole page cascades
+      spec-head.md                     legal introduction
+      de/                              replaces that introduction
+        spec-head.md
+      en/                              soil term only; intro stays from legal
+        terms-definitions/soil.md
+      nl/                              Dutch closing section
+        spec-body.md
 ```
 
 ## Manual files and AI rewrites
